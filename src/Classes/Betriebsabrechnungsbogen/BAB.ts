@@ -1,4 +1,8 @@
 import {
+  ausgabeGesamtkosten,
+  ausgabeVerteilung,
+} from "../../Utils/AusgabeUtils";
+import {
   Gemeinkosten,
   Kostenstelle,
   KostenstellenVerteilung,
@@ -12,6 +16,8 @@ export class Betriebsabrechnungsbogen {
   constructor(gemeinkosten: Gemeinkosten[], kostenstellen: Kostenstelle[]) {
     this.gemeinkosten = gemeinkosten;
     this.kostenstellen = kostenstellen;
+    ausgabeVerteilung(this.verteilungBerechnen());
+    ausgabeGesamtkosten(this.gesamtkostenBerechnen());
   }
 
   // Verteilung der Gemeinkosten auf die Kostenstellen

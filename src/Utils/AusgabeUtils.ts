@@ -2,7 +2,7 @@ import {
   Gemeinkosten,
   Kostenstelle,
   KostenstellenVerteilung,
-} from "../Betriebsabrechnungsbogen/BAB_types";
+} from "../Classes/Betriebsabrechnungsbogen/BAB_types";
 
 // Funktionen für die Ausgabe von Berechnungen
 
@@ -126,6 +126,7 @@ export const ausgabeKostenstellen = (kostenstellen: Kostenstelle[]) => {
 
 export const ausgabeGesamtkosten = (gesamtkosten: number) => {
   console.log(`\n💳 Die Gesamtkosten betragen: ${gesamtkosten.toFixed(2)} €`);
+  console.log("\n");
 };
 
 export const ausgabeVerteilung = (verteilung: KostenstellenVerteilung[]) => {

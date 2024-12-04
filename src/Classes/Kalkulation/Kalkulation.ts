@@ -45,7 +45,7 @@ import {
   ausgabeListenverkaufspreis,
   ausgabeHandlungskosten,
   ausgabeGewinnSatz,
-} from "../Utils/AusgabeUtils";
+} from "../../Utils/AusgabeUtils";
 
 export class Kalkulation {
   private listeneinkaufspreis: Listeneinkaufspreis;
@@ -151,10 +151,6 @@ export class Kalkulation {
     );
   }
 
-  private calculateBezugskosten(): Bezugskosten {
-    return this.bezugskosten;
-  }
-
   private calculateHandlungskosten(): Handlungskosten {
     return 0;
   }
@@ -224,7 +220,6 @@ export class Kalkulation {
     ausgabeBareinkaufspreis(this.bareinkaufspreis);
 
     // Bezugskosten berechnen und ausgeben
-    this.bezugskosten = this.calculateBezugskosten();
     ausgabeBezugskosten(this.bezugskosten);
 
     // Bezugspreis berechnen und ausgeben
