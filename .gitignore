@@ -1,0 +1,50 @@
+# Node Modules
+node_modules/
+
+#Debugging Files
+src/debug
+
+# Build output
+dist/
+build/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDEs und Editoren
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Betriebssystem
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
+*.swp
+*.bak
+
+# Test Coverage
+coverage/
+
+# Dependency directory for serverless framework
+.serverless/
+
+# Docker
+.dockerignore
+docker-compose.override.yml

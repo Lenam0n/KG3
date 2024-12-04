@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES6", // Ziel-JavaScript-Version
+    "module": "commonjs", // Modul-Format
+    "rootDir": "./src", // Quellverzeichnis
+    "outDir": "./dist", // Ausgabeort
+    "strict": true, // Aktiviert strikte Typprüfung
+    "esModuleInterop": true, // Bessere Interoperabilität mit ES-Modulen
+    "skipLibCheck": true // Überspringt die Überprüfung von Typdefinitionen
+  },
+  "include": ["src/**/*"], // Eingeschlossene Dateien
+  "exclude": ["node_modules"] // Ausgeschlossene Dateien
+}
