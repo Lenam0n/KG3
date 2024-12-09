@@ -21,6 +21,8 @@ import {
   HandlungskostenZuschlagsSatz,
   Wareneinsatz,
   Umsätze,
+  KostenProArtikel,
+  MengeProArtikel,
 } from "./Kalkulation_types";
 
 import {
@@ -72,35 +74,44 @@ export class Kalkulation {
   private umsatz: Umsatzerlöse;
   private gewinn_value: Gewinn;
   private handlungskostensatz_value: HandlungskostenZuschlagsSatz;
+  private mengeProArtikel: MengeProArtikel;
+  private kostenProArtikel: KostenProArtikel;
+
+  private HandlungskostenvVonKostenstelle: Handlungskosten;
 
   constructor(
     lieferrabatt: LieferRabatt,
     lieferskonto: LieferSkonto,
     kundenrabatt: KundenRabatt,
     kundenskonto: KundenSkonto,
-    bezugskosten: Bezugskosten,
-    handlungskosten: Handlungskosten,
-    umsatz: Umsatzerlöse
+    HandlungskostenvVonKostenstelle: Handlungskosten,
+    umsatz: Umsatzerlöse,
+    mengeProArtikel: MengeProArtikel,
+    kostenProArtikel: KostenProArtikel
   ) {
     this.lieferRabatt = lieferrabatt;
     this.lieferSkonto = lieferskonto;
     this.kundenRabatt = kundenrabatt;
     this.kundenSkonto = kundenskonto;
-    this.bezugskosten = bezugskosten;
-    this.handlungskosten = handlungskosten;
+    this.HandlungskostenvVonKostenstelle = HandlungskostenvVonKostenstelle;
+
     this.umsatz = umsatz; // Gesamte Umsatzerlöse
+    this.mengeProArtikel = mengeProArtikel;
+    this.kostenProArtikel = kostenProArtikel;
 
     this.listeneinkaufspreis = 0;
     this.zieleinkaufspreis = 0;
     this.bareinkaufspreis = 0;
 
     this.bezugspreis = 0;
+    this.handlungskosten = 0;
     this.handlungskostensatz = 0;
     this.selbstkosten = 0;
     this.gewinn = 0;
     this.barverkaufspreis = 0;
     this.zielverkaufspreis = 0;
     this.listenverkaufspreis = 0;
+    this.bezugskosten = 0;
 
     this.lieferRabatt_value = 0;
     this.lieferSkonto_value = 0;
@@ -135,50 +146,25 @@ export class Kalkulation {
   }
 
   private calculateGewinnSatz(): GewinnSatz {
-    return (this.gewinn / this.umsatz) * 100;
+    return (this.gewinn / this.HandlungskostenvVonKostenstelle) * 100;
   }
 
   private calculateGewinn(): Gewinn {
-    return this.umsatz - this.selbstkosten;
-  }
-
-  private calculateWareneinsatz(): Wareneinsatz {
-    return (
-      this.listeneinkaufspreis -
-      this.lieferRabatt_value -
-      this.lieferSkonto_value +
-      this.bezugskosten
-    );
+    return this.HandlungskostenvVonKostenstelle - this.selbstkosten;
   }
 
   private calculateHandlungskosten(): Handlungskosten {
-    return 0;
+    return this.bezugspreis * (this.handlungskostensatz / 100);
+  }
+
+  private calculateBezugskosten(): Bezugskosten {
+    return this.kostenProArtikel / this.mengeProArtikel;
   }
 
   private calculateHandlungsKostenZuschlagsSatz(): HandlungskostenZuschlagsSatz {
-    console.log(this.handlungskosten, "________-__");
-    console.log(this.calculateWareneinsatz(), "________-__");
-    return (this.handlungskosten / this.calculateWareneinsatz()) * 100;
+    //return 35.1; //for Debugging
+    return (this.HandlungskostenvVonKostenstelle / this.umsatz) * 100;
   }
-
-  /*
-  //bei mehreren Produkten
-  private calculateUmsatzerlöseGesamt(umsätze: Umsätze): Umsatzerlöse {
-    let sum = 0;
-    umsätze.forEach((e) => {
-      sum += this.calculateUmsatzerlöse(e.menge, e.preis);
-    });
-    return sum;
-  }
-
-  //bei nur einem Produkt
-  //Preis => Verkaufspreis pro Einheit
-  //Menge => Anzahl an verkauften Einheiten
-  private calculateUmsatzerlöse(menge: number, preis: number): Umsatzerlöse {
-    this.umsatz = menge * preis;
-    return this.umsatz;
-  }
-  */
 
   // Vorwärtskalkulation
 
@@ -220,6 +206,7 @@ export class Kalkulation {
     ausgabeBareinkaufspreis(this.bareinkaufspreis);
 
     // Bezugskosten berechnen und ausgeben
+    this.bezugskosten = this.calculateBezugskosten();
     ausgabeBezugskosten(this.bezugskosten);
 
     // Bezugspreis berechnen und ausgeben
@@ -230,21 +217,17 @@ export class Kalkulation {
     );
     ausgabeBezugspreis(this.bezugspreis);
 
+    // Handlungskostensatz berechnen und ausgeben
+    this.handlungskostensatz = this.calculateHandlungsKostenZuschlagsSatz();
+    ausgabeHandlungskostensatz(this.handlungskostensatz);
     //Handlunskosten
     this.handlungskosten = this.calculateHandlungskosten();
     ausgabeHandlungskosten(this.handlungskosten);
 
-    // Handlungskostensatz berechnen und ausgeben
-    this.handlungskostensatz = 35.1; //this.calculateHandlungsKostenZuschlagsSatz();
-    ausgabeHandlungskostensatz(this.handlungskostensatz);
-
     // Selbstkosten berechnen und ausgeben
     this.selbstkosten = this.calculateValue(
       this.bezugspreis,
-      this.calculateFromPercentValue(
-        this.bezugspreis,
-        this.handlungskostensatz
-      ),
+      this.handlungskosten,
       "+"
     );
     ausgabeSelbstkosten(this.selbstkosten);

@@ -12,12 +12,16 @@ import {
 export class Betriebsabrechnungsbogen {
   private gemeinkosten: Gemeinkosten[];
   private kostenstellen: Kostenstelle[];
+  private kostenstellenVerteilung: KostenstellenVerteilung[];
+  private gesamtkosten: Gesamtkosten;
 
   constructor(gemeinkosten: Gemeinkosten[], kostenstellen: Kostenstelle[]) {
     this.gemeinkosten = gemeinkosten;
     this.kostenstellen = kostenstellen;
-    ausgabeVerteilung(this.verteilungBerechnen());
-    ausgabeGesamtkosten(this.gesamtkostenBerechnen());
+    this.kostenstellenVerteilung = this.verteilungBerechnen();
+    this.gesamtkosten = this.gesamtkostenBerechnen();
+    ausgabeVerteilung(this.kostenstellenVerteilung);
+    ausgabeGesamtkosten(this.gesamtkosten);
   }
 
   // Verteilung der Gemeinkosten auf die Kostenstellen
@@ -84,11 +88,11 @@ export class Betriebsabrechnungsbogen {
 
   // Öffentliche Methode: Gesamtkosten zurückgeben
   public getGesamtkosten(): Gesamtkosten {
-    return this.gesamtkostenBerechnen();
+    return this.gesamtkosten;
   }
 
   // Öffentliche Methode: Verteilung der Gemeinkosten zurückgeben
   public getKostenstellenVerteilung(): KostenstellenVerteilung[] {
-    return this.verteilungBerechnen();
+    return this.kostenstellenVerteilung;
   }
 }

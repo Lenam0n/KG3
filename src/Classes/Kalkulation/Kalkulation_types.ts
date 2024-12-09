@@ -23,6 +23,10 @@ export type Umsätze = Array<{
   menge: number;
 }>;
 
+export type MengeProArtikel = number;
+export type KostenProArtikel = number;
+export type Versand = number;
+
 // Typ für Listeneinkaufspreis
 export type Listeneinkaufspreis = number;
 // Typ für LieferRabatt
